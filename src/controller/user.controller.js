@@ -40,19 +40,17 @@ const login = async (request, response) =>
 
 // Registrar un usuario (post)
 const register = async (req, res) => {
-    
     try{
         let sql = "INSERT INTO user (firstname, surname, location, email, password, photo)" +
-                  "VALUES ('" + req.body.firstname + " ', '" +
+                  "VALUES ('" + req.body.firstname + " ','" +
                                 req.body.surname + " ','" +
                                 req.body.location + " ','" +
-                                req.body.email + " ','" + 
-                                req.body.password + " ','" +
+                                req.body.email + "','" + 
+                                req.body.password + "','" +
                                 req.body.photo + "')";
 
         let [result] = await pool.query(sql);
         respuesta = {error: false, codigo: 200, dataUser: result}
-        console.log(dataUser);
         res.send(respuesta);
     }catch(err){
         console.log(err);
