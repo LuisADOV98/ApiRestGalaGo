@@ -84,7 +84,7 @@ const register = async (req, res) => {
     const editarPerfil = async (request, response) => {
         try {
             console.log(request.body);
-          const params = [request.body.firstname,
+          let params = [request.body.firstname,
             request.body.surname,
             request.body.location,
             request.body.email,
@@ -92,7 +92,7 @@ const register = async (req, res) => {
             request.body.photo,
             request.body.iduser]
 
-            const sql = "UPDATE user SET firstname = COALESCE(?, firstname), " +
+            let sql = "UPDATE user SET firstname = COALESCE(?, firstname), " +
                                          "surname = COALESCE(?, surname), " +
                                          "location = COALESCE(?, location), " +
                                          "email = COALESCE(?, email), " +
@@ -102,12 +102,16 @@ const register = async (req, res) => {
           // Consulta SQL para actualizar la información del usuario
       
           // Ejecutar la consulta SQL
-          const [result] = await pool.query(sql, params);
+          let [result] = await pool.query(sql, params);
       
           if (result) {
-            return { error: false, codigo: 200, mensaje: 'Usuario actualizado con éxito.' };
+            let respuesta = { error: false, codigo: 200, mensaje: 'Usuario actualizado con éxito.', dataUser:result[0] };
+            console.log(dataUser);
+            response.send(respuesta);
           } else {
-            return { error: true, codigo: 404, mensaje: 'Usuario no encontrado' };
+            let respuesta = { error: true, codigo: 404, mensaje: 'Usuario no encontrado', dataUser:result};
+            console.log(dataUser);
+            response.send(respuesta);
           }
         } catch (error) {
           console.error('Error al actualizar el usuario:', error);
