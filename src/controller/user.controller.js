@@ -59,4 +59,64 @@ const register = async (req, res) => {
     }
 }
 
-module.exports = {getStart,login,register}
+    // const editarPerfil = async (request, response) => {
+    //     try {
+    //       const {iduser, firstname, surname, location, email, password, photo } = request.body;
+    
+      
+    //       // Consulta SQL para actualizar la información del usuario
+    //       const sql = `UPDATE user SET firstname = ?, surname = ?, location = ?, email = ?, password = ?,  photo = ? WHERE iduser = ?`;
+    //       const params = [firstname, surname, location, email, password, photo, iduser];
+      
+    //       // Ejecutar la consulta SQL
+    //       const [result] = await pool.query(sql, params);
+      
+    //       if (result) {
+    //         return { error: false, codigo: 200, mensaje: 'Usuario actualizado con éxito.' };
+    //       } else {
+    //         return { error: true, codigo: 404, mensaje: 'Usuario no encontrado' };
+    //       }
+    //     } catch (error) {
+    //       console.error('Error al actualizar el usuario:', error);
+    //       throw error;
+    //     }
+    //   };
+    const editarPerfil = async (request, response) => {
+        try {
+            console.log(request.body);
+          const params = [request.body.firstname,
+            request.body.surname,
+            request.body.location,
+            request.body.email,
+            request.body.password,
+            request.body.photo,
+            request.body.iduser]
+
+            const sql = "UPDATE user SET firstname = COALESCE(?, firstname), " +
+                                         "surname = COALESCE(?, surname), " +
+                                         "location = COALESCE(?, location), " +
+                                         "email = COALESCE(?, email), " +
+                                         "password = COALESCE(?, password), " +
+                                         "photo = COALESCE(?, photo) " +
+                                         "WHERE iduser = ?"
+          // Consulta SQL para actualizar la información del usuario
+      
+          // Ejecutar la consulta SQL
+          const [result] = await pool.query(sql, params);
+      
+          if (result) {
+            return { error: false, codigo: 200, mensaje: 'Usuario actualizado con éxito.' };
+          } else {
+            return { error: true, codigo: 404, mensaje: 'Usuario no encontrado' };
+          }
+        } catch (error) {
+          console.error('Error al actualizar el usuario:', error);
+          throw error;
+        }
+      };
+      
+
+
+
+
+module.exports = {getStart,login,register, editarPerfil}
