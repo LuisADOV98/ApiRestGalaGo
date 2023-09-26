@@ -4,6 +4,8 @@ const userCtrl = require("../controller/user.controller");
 
 router.get("/", userCtrl.getStart);
 
-router.post("/login", userCtrl.login)
+router.post("/login", userCtrl.login);
+
+router.post("/registro", userCtrl.register);
 
 module.exports = router;

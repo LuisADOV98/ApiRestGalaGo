@@ -7,34 +7,56 @@ function getStart(request, response)
     response.send(respuesta)
 }
 
-
+// Logearse
 const login = async (request, response) =>
 {
     try
     {
-    const {email, password} = request.body
-    console.log(request.body);
-    let sql = "SELECT iduser, firstname, surname, location,email, photo FROM user WHERE email = ? AND password = ?"
+        const {email, password} = request.body
+        console.log(request.body);
+        let sql = "SELECT iduser, firstname, surname, location,email, photo FROM user WHERE email = ? AND password = ?"
 
-    
-    let [result] = await pool.execute(sql, [email, password]);
-        if(result.length != 0){
-    let respuesta = {error:false, codigo:200,
-        mensaje:"Se logueado un usuario", dataUser:result[0]}
-    response.send(respuesta);
- }
- else 
- {
-    let respuesta = {error:true, codigo:400,
-        mensaje:"algo ha salido mal", dataUser:result}
-    response.send(respuesta);
- }
+        
+        let [result] = await pool.execute(sql, [email, password]);
+            if(result.length != 0){
+            let respuesta = {error:false, codigo:200,
+                mensaje:"Se logueado un usuario", dataUser:result[0]}
+            response.send(respuesta);
+        }
+        else 
+        {
+            let respuesta = {error:true, codigo:400,
+                mensaje:"algo ha salido mal", dataUser:result}
+            response.send(respuesta);
+        }
 
-}
-catch(error)
-{
-    console.log(error);
-}
     }
+    catch(error)
+    {
+        console.log(error);
+    }
+}
 
-module.exports = {getStart,login}
+
+// Registrar un usuario (post)
+const register = async (req, res) => {
+    
+    try{
+        let sql = "INSERT INTO user (firstname, surname, location, email, password, photo)" +
+                  "VALUES ('" + req.body.firstname + " ', '" +
+                                req.body.surname + " ','" +
+                                req.body.location + " ','" +
+                                req.body.email + " ','" + 
+                                req.body.password + " ','" +
+                                req.body.photo + "')";
+
+        let [result] = await pool.query(sql);
+        respuesta = {error: false, codigo: 200, dataUser: result}
+        console.log(dataUser);
+        res.send(respuesta);
+    }catch(err){
+        console.log(err);
+    }
+}
+
+module.exports = {getStart,login,register}
