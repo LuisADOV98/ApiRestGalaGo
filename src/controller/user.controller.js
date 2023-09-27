@@ -103,20 +103,23 @@ const register = async (req, res) => {
       
           // Ejecutar la consulta SQL
           let [result] = await pool.query(sql, params);
-      
-          if (result) {
-            let respuesta = { error: false, codigo: 200, mensaje: 'Usuario actualizado con éxito.', dataUser:result[0] };
-            console.log(dataUser);
-            response.send(respuesta);
-          } else {
-            let respuesta = { error: true, codigo: 404, mensaje: 'Usuario no encontrado', dataUser:result};
-            console.log(dataUser);
-            response.send(respuesta);
-          }
-        } catch (error) {
-          console.error('Error al actualizar el usuario:', error);
-          throw error;
-        }
+          if(result.affectedRows > 0){
+          let respuesta = {error:false, codigo:200,
+              mensaje:"Se logueado un usuario", dataUser:result[0]}
+          response.send(respuesta);
+      }
+      else 
+      {
+          let respuesta = {error:true, codigo:400,
+              mensaje:"algo ha salido mal", dataUser:result}
+          response.send(respuesta);
+      }
+
+  }
+  catch(error)
+  {
+      console.log(error);
+  }
       };
       
 
