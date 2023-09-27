@@ -123,9 +123,5 @@ const register = async (req, res) => {
       console.log(error);
   }
       };
-      
-
-
-
 
 module.exports = {getStart,login,register, editarPerfil}

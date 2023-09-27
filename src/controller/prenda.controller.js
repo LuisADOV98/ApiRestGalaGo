@@ -68,14 +68,12 @@ const editarPrenda = async (request, response) => {
           mensaje:"algo ha salido mal", dataPrenda:result}
       response.send(respuesta);
   }
-
 }
 catch(error)
 {
   console.log(error);
 }
   };
-
 
 
 module.exports = {getPrenda, editarPrenda}
