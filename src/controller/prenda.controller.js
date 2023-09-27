@@ -1,10 +1,17 @@
 const { pool } = require("../database");
 const Prenda = require("../models/prenda");
 
+<<<<<<< HEAD
 const getPrenda = async (request, response) => {
     try {
+=======
+//Muestra las 20 ultimas prendas de la BBDD
+const getPrenda = async (request, response) =>
+{
+    try
+    {
+>>>>>>> 26e044234a873e84efff7f55d09281a5407176a1
         let sql = "SELECT * FROM prenda order by idprenda desc limit 20";
-
 
         let [result] = await pool.query(sql);
         let respuesta = {
@@ -18,7 +25,7 @@ const getPrenda = async (request, response) => {
     }
 }
 
-
+//Edita una prenda por idprenda y iduser
 const editarPrenda = async (request, response) => {
     try {
         console.log(request.body);
