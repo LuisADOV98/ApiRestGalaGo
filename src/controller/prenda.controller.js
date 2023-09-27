@@ -59,13 +59,13 @@ const editarPrenda = async (request, response) => {
         console.log(result);
       if(result.affectedRows > 0){
       let respuesta = {error:false, codigo:200,
-          mensaje:"Se ha editado la prenda", dataUser:result}
+          mensaje:"Se ha editado la prenda", dataPrenda:result}
       response.send(respuesta);
   }
   else 
   {
       let respuesta = {error:true, codigo:400,
-          mensaje:"algo ha salido mal", dataUser:result}
+          mensaje:"algo ha salido mal", dataPrenda:result}
       response.send(respuesta);
   }
 
