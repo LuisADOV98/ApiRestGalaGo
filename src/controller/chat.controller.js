@@ -7,14 +7,23 @@ const getChat =async(req,res)=>
     try{
         let sql;
         let respuesta;
-        if(req.body.iduser!=null){
-        sql = `SELECT * FROM chat WHERE iduser1=?` + res.body.iduser;
-        let [resultado] = await pool.query(sql);
-        respuesta = {error: false, codigo: 200,mensaje:"Estos son los chats", res_chat: resultado};
-        console.log(resultado);
-    }
-        else{
-        sql=`iduser no encontrado`;
+
+        if(req.body.iduser1!=null){
+
+        sql = `SELECT * FROM chat WHERE iduser1=?`;
+        let [resultado] = await pool.query(sql,[req.body.iduser1]);
+
+            if(resultado.length > 0){
+
+            respuesta = {error: false, codigo: 200,mensaje:"Estos son los chats", res_chat: resultado};
+            console.log(resultado);
+
+            }else{
+                respuesta = {error: true, codigo: 200,mensaje:"No se encuentran usuarios", res_chat: resultado};
+            }
+        
+        }else{
+        console.log("user no encontrado");
         }
         
         res.send(respuesta); 
