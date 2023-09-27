@@ -35,7 +35,8 @@ const editarPrenda = async (request, response) => {
                     request.body.photo2,
                     request.body.photo3,
                     request.body.photo4,
-                    request.body.idprenda]
+                    request.body.idprenda,
+                    request.body.iduser]
 
         let sql = "UPDATE prenda SET title = COALESCE(?, title), " +
                                      "price = COALESCE(?, price), " +
@@ -49,7 +50,7 @@ const editarPrenda = async (request, response) => {
                                      "photo2 = COALESCE(?, photo2), " +
                                      "photo3 = COALESCE(?, photo3), " +
                                      "photo4 = COALESCE(?, photo4) " +
-                                     "WHERE idprenda = ?"
+                                     "WHERE idprenda = ? AND iduser = ?"
       // Consulta SQL para actualizar la información de la prenda
   
       // Ejecutar la consulta SQL
