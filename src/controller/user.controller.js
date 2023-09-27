@@ -7,7 +7,7 @@ function getStart(request, response)
     response.send(respuesta)
 }
 
-// Logearse
+// Logearse (post)
 const login = async (request, response) =>
 {
     try
@@ -42,9 +42,9 @@ const login = async (request, response) =>
 const register = async (req, res) => {
     try{
         let sql = "INSERT INTO user (firstname, surname, location, email, password, photo)" +
-                  "VALUES ('" + req.body.firstname + " ','" +
-                                req.body.surname + " ','" +
-                                req.body.location + " ','" +
+                  "VALUES ('" + req.body.firstname + "','" +
+                                req.body.surname + "','" +
+                                req.body.location + "','" +
                                 req.body.email + "','" + 
                                 req.body.password + "','" +
                                 req.body.photo + "')";
@@ -79,6 +79,8 @@ const register = async (req, res) => {
     //       throw error;
     //     }
     //   };
+
+    //Editar perfil (put)
     const editarPerfil = async (request, response) => {
         try {
             console.log(request.body);

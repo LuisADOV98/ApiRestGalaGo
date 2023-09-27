@@ -1,12 +1,12 @@
 const {pool} = require("../database");
 const Prenda = require("../models/prenda");
 
+//Muestra las 20 ultimas prendas de la BBDD
 const getPrenda = async (request, response) =>
 {
     try
     {
         let sql = "SELECT * FROM prenda order by idprenda desc limit 20";
-
 
         let [result] = await pool.query(sql);
         let respuesta = {error:false, codigo:200,
@@ -19,7 +19,7 @@ const getPrenda = async (request, response) =>
     }
 }
 
-
+//Edita una prenda por idprenda y iduser
 const editarPrenda = async (request, response) => {
     try {
         console.log(request.body);
