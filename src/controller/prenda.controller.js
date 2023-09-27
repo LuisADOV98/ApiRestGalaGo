@@ -5,7 +5,7 @@ const getPrenda = async (request, response) =>
 {
     try
     {
-        let sql = "SELECT * FROM prenda WHERE idprenda <= 4";
+        let sql = "SELECT * FROM prenda order by idprenda desc limit 4 ;";
 
 
         let [result] = await pool.query(sql);
