@@ -3,6 +3,7 @@ const router = Router();
 const userCtrl = require("../controller/user.controller");
 
 router.get("/", userCtrl.getStart);
+router.get("/locations", userCtrl.getLocations);
 
 router.post("/login", userCtrl.login);
 

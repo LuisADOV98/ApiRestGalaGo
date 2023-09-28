@@ -123,9 +123,28 @@ const register = async (req, res) => {
       console.log(error);
   }
       };
-      
 
+// COGER VALORES DE LOS ENUM
+const getLocations = async (req, res) => {
+    try{
+        let sql = "SELECT COLUMN_TYPE " +
+                  "FROM information_schema.COLUMNS " +
+                  "WHERE TABLE_SCHEMA = 'GalaGo' " +
+                  "AND TABLE_NAME = 'user' " +
+                  "AND COLUMN_NAME = 'location' "
 
+        let [result] = await pool.query(sql);
+        //Cojo sólo lo que esté entre comillas y coma para dejar un array de las opciones
+            //COLUMN_TYPE es para acceder a los datos del enum
+            //g define las barras /.../
+            //despues de coger las coincidencias .map devuelve los valores eliminando (slice) los caracteres 
+        let enumOptions = result[0].COLUMN_TYPE.match(/'([^']+)'/g).map(option => option.slice(1,-1));
+        //Devuelve un dataEnum porque es un array de string en la respuesta de Angular 
+        respuesta = {error: false, codigo: 200, dataEnum: enumOptions}
+        res.send(respuesta);
+    }catch(err){
+        console.log(err);
+    }
+} 
 
-
-module.exports = {getStart,login,register, editarPerfil}
+module.exports = {getStart,login,register, editarPerfil,getLocations}
