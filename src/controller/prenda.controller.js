@@ -82,11 +82,11 @@ const getTalla = async(req, res) => {
 }
 const getEvento = async(req, res) => {
     try{
-        let sql = "SELECT COLUMN_TYPE " +
-                  "FROM information_schema.COLUMNS " +
-                  "WHERE TABLE_SCHEMA = 'GalaGo' " +
-                  "AND TABLE_NAME = 'prenda' " +
-                  "AND COLUMN_NAME = 'event' "
+        let sql = `SELECT COLUMN_TYPE 
+        FROM information_schema.COLUMNS 
+        WHERE TABLE_SCHEMA = 'GalaGo' 
+        AND TABLE_NAME = 'prenda' 
+        AND COLUMN_NAME = 'event'`
 
         let [result] = await pool.query(sql);
         //Cojo sólo lo que esté entre comillas y coma para dejar un array de las opciones
@@ -129,7 +129,6 @@ const editarPrenda = async (request, response) => {
         let params = [request.body.title,
         request.body.price,
         request.body.description,
-        request.body.location,
         request.body.state,
         request.body.size,
         request.body.event,
@@ -144,7 +143,6 @@ const editarPrenda = async (request, response) => {
         let sql = "UPDATE prenda SET title = COALESCE(?, title), " +
             "price = COALESCE(?, price), " +
             "description = COALESCE(?, description), " +
-            "location = COALESCE(?, location), " +
             "state = COALESCE(?, state), " +
             "size = COALESCE(?, size), " +
             "event = COALESCE(?, event), " +
@@ -185,11 +183,10 @@ const editarPrenda = async (request, response) => {
 const postPrenda = async (request, response) => {
     try {
         console.log(request.body);
-        let sql = "INSERT INTO prenda (title, price, description, location, state, size, event, type, photo1, photo2, photo3, photo4) " +
+        let sql = "INSERT INTO prenda (title, price, description, state, size, event, type, photo1, photo2, photo3, photo4,iduser) " +
             "VALUES ('" + request.body.title + "','" +
             request.body.price + "','" +
             request.body.description + "','" +
-            request.body.location + "','" +
             request.body.state + "','" +
             request.body.size + "','" +
             request.body.event + "','" +
@@ -197,7 +194,9 @@ const postPrenda = async (request, response) => {
             request.body.photo1 + "','" +
             request.body.photo2 + "','" +
             request.body.photo3 + "','" +
-            request.body.photo4 + "')"
+            request.body.photo4 + "','" +
+            request.body.iduser + "')"
+            
 
         console.log(sql);
         let [result] = await pool.query(sql);
@@ -222,4 +221,4 @@ const postPrenda = async (request, response) => {
 }
 
 
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo}
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda}
