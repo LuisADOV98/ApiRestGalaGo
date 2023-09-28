@@ -11,7 +11,7 @@ const getPrenda = async (request, response) =>
         let [result] = await pool.query(sql);
         let respuesta = {
             error: false, codigo: 200,
-            mensaje: "estos son las prendas", data: result
+            mensaje: "estos son los titulos", data: result
         }
         response.send(respuesta);
     }
@@ -119,4 +119,4 @@ const postPrenda = async (request, response) => {
 
 
 
-module.exports = { getPrenda, editarPrenda, postPrenda }
+module.exports = { getPrenda, editarPrenda, postPrenda,}
