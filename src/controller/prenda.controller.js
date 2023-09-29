@@ -215,19 +215,11 @@ const getTalla = async(req, res) => {
 }
 const getEvento = async(req, res) => {
     try{
-<<<<<<< HEAD
         let sql = "SELECT COLUMN_TYPE " +
                   "FROM information_schema.COLUMNS " +
                   "WHERE TABLE_SCHEMA = 'GalaGo' " +
                   "AND TABLE_NAME = 'prenda' " +
                   "AND COLUMN_NAME = 'evento' "
-=======
-        let sql = `SELECT COLUMN_TYPE 
-        FROM information_schema.COLUMNS 
-        WHERE TABLE_SCHEMA = 'GalaGo' 
-        AND TABLE_NAME = 'prenda' 
-        AND COLUMN_NAME = 'evento'`
->>>>>>> favs
 
         let [result] = await pool.query(sql);
         //Cojo sólo lo que esté entre comillas y coma para dejar un array de las opciones
@@ -323,14 +315,14 @@ const editarPrenda = async (request, response) => {
 const postPrenda = async (request, response) => {
     try {
         console.log(request.body);
-        let sql = "INSERT INTO prenda (title, price, description, state, size, event, type, photo1, photo2, photo3, photo4,iduser) " +
+        let sql = "INSERT INTO prenda (title, price, description, state, size, evento, tipo, photo1, photo2, photo3, photo4,iduser) " +
             "VALUES ('" + request.body.title + "','" +
             request.body.price + "','" +
             request.body.description + "','" +
             request.body.state + "','" +
             request.body.size + "','" +
-            request.body.event + "','" +
-            request.body.type + "','" +
+            request.body.evento + "','" +
+            request.body.tipo + "','" +
             request.body.photo1 + "','" +
             request.body.photo2 + "','" +
             request.body.photo3 + "','" +
@@ -367,10 +359,6 @@ const getMisPrendas = async (request, response) =>
         
         let sql = "SELECT * FROM prenda WHERE iduser =" + request.query.iduser;
 
-<<<<<<< HEAD
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo,postPrenda,getFiltro}
-
-=======
         let [result] = await pool.query(sql);
         let respuesta = {
             error: false, codigo: 200,
@@ -436,5 +424,4 @@ const getMisFavs = async (request, response) =>
     }
 }
 
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs}
->>>>>>> favs
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs, getFiltro}

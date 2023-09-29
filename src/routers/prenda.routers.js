@@ -18,10 +18,6 @@ router.get("/perfil", prendaCtrl.getMisPrendas)//muestras las prendas del perfil
 router.post("/perfil", prendaCtrl.postFav)//añade a favoritos las prendas
 router.get("/favoritos", prendaCtrl.getMisFavs)//enseña los favoritos de un user en el perfil
 
-<<<<<<< HEAD
-router.post("/publicar-prenda", prendaCtrl.postPrenda);
-=======
->>>>>>> favs
 
 // Filtros de HOME
 router.get("/filtro", prendaCtrl.getFiltro);
