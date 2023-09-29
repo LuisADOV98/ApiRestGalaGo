@@ -20,6 +20,7 @@ const getPrenda = async (request, response) =>
     }
 }
 
+//EL BUENO
 const getPrendaHome = async (req, res) =>
 {
     try
@@ -36,16 +37,17 @@ const getPrendaHome = async (req, res) =>
                 req.query.evento,
                 req.query.state]
 
+            console.log("req.query.price: ", req.query.price);
             let column = ["tipo","size","price","evento","state"]; //array con las columnas //FALTA UBICACIÓN
             
             let find_undefined = true;                                  //condición para que pare el bucle cuando encuentre un parámetro
             for(let i=0; i< params.length && find_undefined; i++){      //recorre el params y acaba cuando encuentra un undefinden o termina el array
-                if(params[i] !== undefined && params[i] !== 0){                             //si el parámetro no es undefined y no es la columna precio entra
+                if(params[i] !== undefined){                             //si el parámetro no es undefined y no es la columna precio entra
                     find_undefined = false;  
                     if(column[i] !== "price"){
                         sql = `SELECT * FROM prenda WHERE ${column[i]} = "${params[i]}" `              
-                    }else{
-                        sql = `SELECT * FROM prenda WHERE ${column[i]} <= ${params[i]} `
+                    }else if  (params[i] !== undefined){
+                        sql = `SELECT * FROM prenda HAVING ${column[i]} <= ${params[i]} `
                     }                                               
 
                     for(let j=i+1; j < params.length; j++){             //empieza el segundo bucle para añadir AND si hay más filtros
@@ -59,7 +61,8 @@ const getPrendaHome = async (req, res) =>
                     }
 
                 }
-            
+                console.log(req.query.price);
+                console.log(params[i]);
                 console.log(sql);
                 
             }
