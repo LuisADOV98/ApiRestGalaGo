@@ -20,19 +20,149 @@ const getPrenda = async (request, response) =>
     }
 }
 
-const getPrendaHome = async (request, response) =>
+const getPrendaHome = async (req, res) =>
 {
     try
     {
         let sql = "SELECT * FROM prenda order by idprenda desc limit 20";
 
         let [result] = await pool.query(sql);
-        let respuesta = {error:false, codigo:200,
-            mensaje:"estos son las prendas", data:result}
-        response.send(respuesta);
+        respuesta = {error:false, codigo:200, mensaje:"TODAS LAS PRENDAS", data: result}
+
+        // PARA CUANDO SE APLIQUEN FILTROS
+            let params = [req.query.tipo,
+                req.query.size,
+                req.query.price,
+                req.query.evento,
+                req.query.state]
+
+            let column = ["tipo","size","price","evento","state"]; //array con las columnas //FALTA UBICACIÓN
+            
+            let find_undefined = true;                                  //condición para que pare el bucle cuando encuentre un parámetro
+            for(let i=0; i< params.length && find_undefined; i++){      //recorre el params y acaba cuando encuentra un undefinden o termina el array
+                if(params[i] !== undefined && params[i] !== 0){                             //si el parámetro no es undefined y no es la columna precio entra
+                    find_undefined = false;  
+                    if(column[i] !== "price"){
+                        sql = `SELECT * FROM prenda WHERE ${column[i]} = "${params[i]}" `              
+                    }else{
+                        sql = `SELECT * FROM prenda WHERE ${column[i]} <= ${params[i]} `
+                    }                                               
+
+                    for(let j=i+1; j < params.length; j++){             //empieza el segundo bucle para añadir AND si hay más filtros
+                        if(params[j] !== undefined){ //el segundo bucle empieza donde acaba el primero +1
+                            if(column[j] !== "price"){
+                                sql += ` AND ${column[j]} = "${params[j]}" ` //añadimos los AND siempre que no sea undefine y la columna precio 
+                            }else{
+                                sql += ` AND ${column[j]} <= ${params[j]} ` //añadimos los AND siempre que no sea undefine y la columna precio  
+                            }
+                        }
+                    }
+
+                }
+            
+                console.log(sql);
+                
+            }
+            
+            [result] = await pool.query(sql,params);
+            respuesta = {error:false, codigo:200,mensaje:"estos son las prendas", data:result}
+            console.log(result);
+
+        res.send(respuesta);
     }
     catch(err)
     {
+        console.log(err);
+    }
+}
+
+// const getPrendaHome2 = async (req, res) =>
+// {
+//     try
+//     {
+//         let sql = "SELECT * FROM prenda order by idprenda desc limit 20";
+//         let params = [];
+//         let conditions = [];
+//         // PARA CUANDO SE APLIQUEN FILTROS
+//             let queryParams = {tipo: req.query.tipo,
+//                                sizw: req.query.size,
+//                                price: req.query.price,
+//                                evento: req.query.evento,
+//                                evento: req.query.state}
+
+//             let column = ["tipo","size","price","evento","state"]; //array con las columnas //FALTA UBICACIÓN
+            
+//             for(let i=0; i< column.length; i++){      //recorre el params y acaba cuando encuentra un undefinden o termina el array
+//                 if(queryParams[column[i]] != undefined){
+//                     if(column[i] !== "price") {
+//                         conditions.push(`${column[i]}=?`);
+//                         params.push(queryParams[column[i]]);
+//                     }else if(queryParams[column[i]] !== 0) {
+//                         conditions.push(`${column[i]} <= ?`);
+//                         params.push(queryParams[column[i]]);
+//                     }
+//                 } 
+//              if(conditions.length > 0){
+//                 sql += "WHERE" + conditions.join(" AND ");
+//              }   
+            
+//             console.log(sql);
+
+//             let [result] = await pool.query(sql,params);
+//             respuesta = {error:false, codigo:200,mensaje:"estos son las prendas", data:result}
+//             console.log(result);
+//         }
+
+//         res.send(respuesta);
+//     }
+//     catch(err)
+//     {
+//         console.log(err);
+//     }
+// }
+
+// ---- FILTROS DE H0ME ---- // NO LA PUEDO COMENTAR
+const getFiltro = async (req, res) =>
+{
+    try{
+        let respuesta
+        let params = [req.query.tipo,
+                      req.query.size,
+                      req.query.price,
+                      req.query.evento,
+                      req.query.state]
+
+        let column = ["tipo","size","price","evento","state"]; //array con las columnas //FALTA UBICACIÓN
+        
+        let sql= `SELECT * FROM prenda `;                     //primera parte del filtro
+        let find_undefined = true;                                  //condición para que pare el bucle cuando encuentre un parámetro
+        for(let i=0; i< params.length && find_undefined; i++){      //recorre el params y acaba cuando encuentra un undefinden o termina el array
+            if((params[i] != "undefined") && (column[i] != "price")){ //si el parámetro no es undefined y no es la columna precio entra
+                find_undefined = false;                             //cambia el bool a false para que acabe el primer bloque
+                sql += `WHERE ${column[i]} = "${params[i]}"`              //añade la primera columna filtrada 
+
+                for(let j=i+1; j < params.length; j++){             //empieza el segundo bucle para añadir AND si hay más filtros
+                    if((params[j] != "undefined") && (column[j] != "price")){ //el segundo bucle empieza donde acaba el primero +1
+                        sql += ` AND ${column[j]} = "${params[j]}"` //añadimos los AND siempre que no sea undefine y la columna precio 
+
+                    }else if((column[j] === "price") && (params[j] != 0)){                //si es la columna precio entra
+                        sql += ` AND ${column[j]} <= ${params[j]}`  //la condición será que el dato lo recoge como un numero y debe ser <=
+                    }
+                }
+
+            }else if((column[i] === "price") && (params[i] != 0)){                        //si es la columna precio entra
+                sql += `${column[i]} <= ${params[i]}`               //la condición será que el dato lo recoge como un numero y debe ser <=
+            }
+        }
+        console.log(sql);
+
+        let [result] = await pool.query(sql,params);
+        respuesta = {error:false, codigo:200, mensaje:"estos son las prendas", data:result}
+        console.log(result);
+       
+        res.send(respuesta);
+    
+    }catch(err){
         console.log(err);
     }
 }
@@ -44,7 +174,7 @@ const getTipo = async(req, res) => {
                   "FROM information_schema.COLUMNS " +
                   "WHERE TABLE_SCHEMA = 'GalaGo' " +
                   "AND TABLE_NAME = 'prenda' " +
-                  "AND COLUMN_NAME = 'type' "
+                  "AND COLUMN_NAME = 'tipo' "
 
         let [result] = await pool.query(sql);
         //Cojo sólo lo que esté entre comillas y coma para dejar un array de las opciones
@@ -86,7 +216,7 @@ const getEvento = async(req, res) => {
                   "FROM information_schema.COLUMNS " +
                   "WHERE TABLE_SCHEMA = 'GalaGo' " +
                   "AND TABLE_NAME = 'prenda' " +
-                  "AND COLUMN_NAME = 'event' "
+                  "AND COLUMN_NAME = 'evento' "
 
         let [result] = await pool.query(sql);
         //Cojo sólo lo que esté entre comillas y coma para dejar un array de las opciones
@@ -222,4 +352,4 @@ const postPrenda = async (request, response) => {
 }
 
 
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo}
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo,postPrenda,getFiltro}
