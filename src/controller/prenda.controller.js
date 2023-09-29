@@ -215,11 +215,19 @@ const getTalla = async(req, res) => {
 }
 const getEvento = async(req, res) => {
     try{
+<<<<<<< HEAD
         let sql = "SELECT COLUMN_TYPE " +
                   "FROM information_schema.COLUMNS " +
                   "WHERE TABLE_SCHEMA = 'GalaGo' " +
                   "AND TABLE_NAME = 'prenda' " +
                   "AND COLUMN_NAME = 'evento' "
+=======
+        let sql = `SELECT COLUMN_TYPE 
+        FROM information_schema.COLUMNS 
+        WHERE TABLE_SCHEMA = 'GalaGo' 
+        AND TABLE_NAME = 'prenda' 
+        AND COLUMN_NAME = 'evento'`
+>>>>>>> favs
 
         let [result] = await pool.query(sql);
         //Cojo sólo lo que esté entre comillas y coma para dejar un array de las opciones
@@ -270,21 +278,20 @@ const editarPrenda = async (request, response) => {
         request.body.photo2,
         request.body.photo3,
         request.body.photo4,
-        request.body.idprenda,
-        request.body.iduser]
+        request.body.idprenda]
 
         let sql = "UPDATE prenda SET title = COALESCE(?, title), " +
             "price = COALESCE(?, price), " +
             "description = COALESCE(?, description), " +
             "state = COALESCE(?, state), " +
             "size = COALESCE(?, size), " +
-            "event = COALESCE(?, event), " +
-            "type = COALESCE(?, type), " +
+            "evento = COALESCE(?, evento), " +
+            "tipo = COALESCE(?, tipo), " +
             "photo1 = COALESCE(?, photo1), " +
             "photo2 = COALESCE(?, photo2), " +
             "photo3 = COALESCE(?, photo3), " +
             "photo4 = COALESCE(?, photo4) " +
-            "WHERE idprenda = ? AND iduser = ?"
+            "WHERE idprenda = ?"
         // Consulta SQL para actualizar la información de la prenda
 
         // Ejecutar la consulta SQL
@@ -294,7 +301,7 @@ const editarPrenda = async (request, response) => {
         if (result.affectedRows > 0) {
             let respuesta = {
                 error: false, codigo: 200,
-                mensaje: "Se ha editado la prenda", dataPrenda: result
+                mensaje: "Se ha editado la prenda", data: result
             }
             response.send(respuesta);
         }
@@ -353,6 +360,81 @@ const postPrenda = async (request, response) => {
       
 }
 
+const getMisPrendas = async (request, response) =>
+{
+    try
+    {
+        
+        let sql = "SELECT * FROM prenda WHERE iduser =" + request.query.iduser;
 
+<<<<<<< HEAD
 module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo,postPrenda,getFiltro}
 
+=======
+        let [result] = await pool.query(sql);
+        let respuesta = {
+            error: false, codigo: 200,
+            mensaje: "estos son tus prendas", data: result
+        }
+        response.send(respuesta);
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+const postFav = async (request, response) => {
+    try {
+        console.log(request.body);
+        let sql = "INSERT INTO favoritos (iduser, idprenda) " + 
+            " VALUES ('" + request.body.iduser + "','" +
+            request.body.idprenda + "')"             
+
+        console.log(sql);
+        let [result] = await pool.query(sql);
+        console.log(result);
+
+        if(result.affectedRows > 0){
+            let respuesta = {error:false, codigo:200,
+                mensaje:"Se ha editado la prenda", dataPrenda:result}
+            response.send(respuesta);
+          }
+          else 
+          {
+            let respuesta = {error:true, codigo:400,
+                mensaje:"algo ha salido mal", dataPrenda:result}
+            response.send(respuesta);
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+      
+}
+
+
+const getMisFavs = async (request, response) =>
+{
+    try
+    {
+        
+        let sql = `SELECT * FROM prenda JOIN favoritos ON (prenda.idprenda = favoritos.idprenda) JOIN user ON (prenda.iduser = user.iduser) WHERE favoritos.iduser =` + request.query.iduser
+
+        let [result] = await pool.query(sql);
+        console.log(sql);
+        console.log("-------------------------------");
+        console.log(result);console.log("-------------------------------");
+        console.log(request.query.idprenda);
+        let respuesta = {
+            error: false, codigo: 200,
+            mensaje: "estos son tus prendas", data: result
+        }
+        response.send(respuesta);
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs}
+>>>>>>> favs
