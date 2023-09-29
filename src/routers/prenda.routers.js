@@ -6,6 +6,8 @@ router.get("/landing-page", prendaCtrl.getPrenda);
 
 router.put("/editar-prenda", prendaCtrl.editarPrenda);
 
+router.get('/prendaId', prendaCtrl.obtenerDetallesPrenda);
+
 
 
 module.exports = router;
