@@ -370,6 +370,34 @@ const getMisPrendas = async (request, response) =>
         console.log(err);
     }
 }
+const obtenerDetallesPrenda = async (request, response) => {
+  try {
+    let idPrenda = request.params.idprenda;
+
+    // Consulta SQL para obtener detalles de la prenda por su ID
+    let sql = 'SELECT * FROM prenda WHERE idprenda = ?';
+
+    // Ejecuta la consulta con el ID de la prenda proporcionado
+    let [result] = await pool.query(sql, [idPrenda]);
+
+    // Verifica si se encontraron resultados
+    if (result.length === 0) {
+      let respuesta = { error: true, mensaje: 'Prenda no encontrada', dataPrenda:result };
+      response.send(respuesta);
+    } else {
+
+    // La prenda fue encontrada, devuelve los detalles
+    let respuesta =  { error: false, codigo: 200, mensaje: 'Detalles de la prenda', dataPrenda: result };
+    response.send(respuesta);
+  }
+  } catch (err) {
+    console.error('Error al obtener detalles de la prenda:', err);
+    return { error: true, mensaje: 'Error al obtener detalles de la prenda' };
+  }
+};
+
+
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo,postPrenda,getFiltro, obtenerDetallesPrenda}
 
 const postFav = async (request, response) => {
     try {
@@ -424,4 +452,4 @@ const getMisFavs = async (request, response) =>
     }
 }
 
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs, getFiltro}
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs, getFiltro, obtenerDetallesPrenda}
