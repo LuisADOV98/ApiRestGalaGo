@@ -14,7 +14,7 @@ router.get("/estado", prendaCtrl.getEstado); //muestra las 20 últimas prendas
 router.put("/editar-prenda", prendaCtrl.editarPrenda); //edita una prenda por idprenda y iduser
 
 router.post("/publicar-prenda", prendaCtrl.postPrenda);
-
+router.get('/prendaId/:idprenda', prendaCtrl.obtenerDetallesPrenda);
 // Filtros de HOME
 router.get("/filtro", prendaCtrl.getFiltro);
 module.exports = router;
