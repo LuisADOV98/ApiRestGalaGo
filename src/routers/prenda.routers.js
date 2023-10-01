@@ -15,10 +15,11 @@ router.put("/prenda", prendaCtrl.editarPrenda); //edita una prenda por idprenda 
 router.post("/prenda", prendaCtrl.postPrenda) //agrega una prenda
 
 router.get("/perfil", prendaCtrl.getMisPrendas)//muestras las prendas del perfil que son del user
-router.post("/perfil", prendaCtrl.postFav)//añade a favoritos las prendas
+/* router.post("/perfil", prendaCtrl.postFav) *///añade a favoritos las prendas 
 router.get("/favoritos", prendaCtrl.getMisFavs)//enseña los favoritos de un user en el perfil
+router.post("/favoritos", prendaCtrl.postFav)
+router.delete("/favoritos/:iduser/:idprenda", prendaCtrl.deleteFav)
 
-router.get('/prendaId/:idprenda', prendaCtrl.obtenerDetallesPrenda);
 // Filtros de HOME
 router.get("/filtro", prendaCtrl.getFiltro);
 module.exports = router;
