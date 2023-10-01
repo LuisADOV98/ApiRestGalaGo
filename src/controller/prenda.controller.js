@@ -371,6 +371,8 @@ const getMisPrendas = async (request, response) =>
     }
 }
 
+/////////////////////////////////////FAVORITOS ABAJO////////////////////////////////////////////////
+
 const postFav = async (request, response) => {
     try {
         console.log(request.body);
@@ -384,7 +386,7 @@ const postFav = async (request, response) => {
 
         if(result.affectedRows > 0){
             let respuesta = {error:false, codigo:200,
-                mensaje:"Se ha editado la prenda", dataPrenda:result}
+                mensaje:"Se ha añadido la prenda", dataPrenda:result}
             response.send(respuesta);
           }
           else 
@@ -406,6 +408,52 @@ const getMisFavs = async (request, response) =>
     try
     {
         
+        let sql = `SELECT * FROM prenda JOIN favoritos ON (prenda.idprenda = favoritos.idprenda) WHERE favoritos.iduser =` + request.query.iduser
+
+        let [result] = await pool.query(sql);
+        console.log(sql);
+        console.log("-------------------------------");
+        console.log(result);console.log("-------------------------------");
+        console.log(request.query.idprenda);
+        let respuesta = { // ESTE
+            error: false, codigo: 200,
+            mensaje: "Estas son tus prendas:", data: result
+        }
+        response.send(respuesta);
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+const deleteFav = async (request, response) => {
+    try 
+    {
+        console.log("PRUEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        const {iduser, idprenda} = request.params;
+
+        let sql = `DELETE FROM favoritos WHERE favoritos.iduser = ${pool.escape(iduser)} AND favoritos.idprenda = ${pool.escape(idprenda)}`;
+        let [result] = await pool.query(sql);
+        console.log(sql);
+        console.log("-------------------------------");
+        console.log(result);console.log("-------------------------------");
+
+        let respuesta = { 
+            error: false, codigo: 200,
+            mensaje: "Se ha eliminado la prenda de tus favoritos.", data: result
+        }
+        response.send(respuesta);
+
+    }
+    catch (error) {
+        console.log(err);
+    }
+}
+/* const getMisFavs = async (request, response) =>
+{
+    try
+    {
+        
         let sql = `SELECT * FROM prenda JOIN favoritos ON (prenda.idprenda = favoritos.idprenda) JOIN user ON (prenda.iduser = user.iduser) WHERE favoritos.iduser =` + request.query.iduser
 
         let [result] = await pool.query(sql);
@@ -422,6 +470,6 @@ const getMisFavs = async (request, response) =>
     catch (err) {
         console.log(err);
     }
-}
+} */
 
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs, getFiltro}
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs, getFiltro, deleteFav}
