@@ -90,6 +90,8 @@ const createMensaje = async (req, res) => {
         WHERE (c.iduser1 = ? AND c.iduser2 = ?) OR (c.iduser1 = ? AND c.iduser2 = ?)
         ORDER BY m.idmessage ASC;
       `;
+
+      console.log(sql);
   
       let queryParams = [iduser1, iduser2, iduser2, iduser1];
   
