@@ -9,6 +9,6 @@ const pool = mysql.createPool(
         port: process.env.DB_PORT || 3306
     }).promise();
     console.log("conexion con la BBDD Creada");
-
+    
     module.exports = {pool}
 
