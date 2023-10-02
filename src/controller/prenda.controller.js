@@ -373,6 +373,7 @@ const getMisPrendas = async (request, response) =>
 const obtenerDetallesPrenda = async (request, response) => {
   try {
     let idPrenda = request.params.idprenda;
+    const propietario = request.params.propietario;
 
     // Consulta SQL para obtener detalles de la prenda por su ID
     let sql = 'SELECT * FROM prenda WHERE idprenda = ?';
@@ -397,7 +398,7 @@ const obtenerDetallesPrenda = async (request, response) => {
 };
 
 
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo,postPrenda,getFiltro, obtenerDetallesPrenda}
+// module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo,postPrenda,getFiltro, obtenerDetallesPrenda}
 
 const postFav = async (request, response) => {
     try {
