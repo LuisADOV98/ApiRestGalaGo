@@ -9,7 +9,7 @@ const getChat =async(req,res)=>{
         let { iduser} = req.query;
         let params = [iduser,iduser,iduser,iduser];
        
-        let sql=`SELECT idchat, datehour, hasnewmessage, firstname, surname, photo FROM chat JOIN user ON ((chat.iduser1=user.iduser AND chat.iduser1!=?) OR
+        let sql=`SELECT idchat, iduser2, datehour, hasnewmessage, firstname, surname, photo FROM chat JOIN user ON ((chat.iduser1=user.iduser AND chat.iduser1!=?) OR
         (chat.iduser2=user.iduser AND chat.iduser2!=?))
         WHERE iduser1=? OR iduser2=?;`;
 
