@@ -8,10 +8,23 @@ const getChat =async(req,res)=>{
       
         let { iduser} = req.query;
         let params = [iduser,iduser,iduser,iduser];
+        console.log("req query!", req.query);
        
-        let sql=`SELECT idchat, iduser2, datehour, hasnewmessage, firstname, surname, photo FROM chat JOIN user ON ((chat.iduser1=user.iduser AND chat.iduser1!=?) OR
-        (chat.iduser2=user.iduser AND chat.iduser2!=?))
+        let sql=`SELECT idchat, datehour, hasnewmessage, firstname, surname, photo FROM chat 
+        JOIN user ON ((chat.iduser1=user.iduser AND chat.iduser1!=?) 
+                  OR (chat.iduser2=user.iduser AND chat.iduser2!=?))
         WHERE iduser1=? OR iduser2=?;`;
+        
+        // let sql=`SELECT idchat, datehour, hasnewmessage, message, firstname, surname, photo FROM chat 
+        // INNER JOIN user ON ((chat.iduser1=u.iduser AND chat.iduser1!=?) 
+        //           OR (chat.iduser2=user.iduser AND chat.iduser2!=?))
+        // INNER JOIN GalaGo.mensaje ON (mensaje.idchat = chat.idchat)
+        // WHERE iduser1=? 
+        // ORDER BY idmessage DESC LIMIT 1;`;
+        console.log("params:", params);
+
+        /* SELECT message FROM GalaGo.mensaje
+          WHERE idchat = 1 ORDER BY idmessage DESC LIMIT 1;*/
 
         let [resultado] = await pool.query(sql,params);
             if(resultado.length > 0){
@@ -88,23 +101,45 @@ const createMensaje = async (req, res) => {
         JOIN user AS u ON m.iduser = u.iduser
         JOIN chat AS c ON m.idchat = c.idchat
         WHERE (c.iduser1 = ? AND c.iduser2 = ?) OR (c.iduser1 = ? AND c.iduser2 = ?)
-        ORDER BY m.idmessage ASC;
-      `;
+        ORDER BY m.idmessage ASC;`;
 
-      console.log(sql);
+      console.log("sql de getMensaje:\n",sql);
   
       let queryParams = [iduser1, iduser2, iduser2, iduser1];
   
       let [resultado] = await pool.query(sql, queryParams);
-  
+
       res.status(200).json(resultado);
     } catch (error) {
       console.error('Error al obtener mensajes: ' + error.message);
       res.status(500).json({ error: 'Error al obtener mensajes' });
     }
   };
-  
 
+
+  //Datos del usuario2 para la CONVERSACIÓN 
+  const getUser2 = async (req, res) => {
+    try {
+      const iduser2 = req.query;
+      console.log("iduser2",iduser2);
+      // Consulta SQL para obtener los mensajes entre dos usuarios y los detalles de usuario
+      let sql = `SELECT u.iduser, u.firstname, u.surname FROM GalaGo.chat AS c
+                 INNER JOIN GalaGo.user AS u ON (c.iduser2 = u.iduser)
+                 WHERE iduser2 = ` + req.query.iduser2;
+
+      console.log("sql user2:\n",sql);
+  
+      let queryParams = [iduser2, iduser2];
+  
+      let [resultado] = await pool.query(sql, queryParams);
+      console.log("resultado user2:", resultado);
+
+      res.status(200).json(resultado);
+    } catch (error) {
+      console.error('Error al obtener mensajes: ' + error.message);
+      res.status(500).json({ error: 'Error al obtener mensajes' });
+    }
+  };
 
 //CONVERSACION-CHAT
 // async function postChat(req,res){
@@ -126,4 +161,4 @@ const createMensaje = async (req, res) => {
 //     }
 // }
 // module.exports = {getChat,delChat}
-module.exports = {getChat,verificarChat, createMensaje,getMensaje}
+module.exports = {getChat,verificarChat, createMensaje,getMensaje, getUser2}
