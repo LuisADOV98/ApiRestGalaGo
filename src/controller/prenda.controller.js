@@ -373,6 +373,7 @@ const getMisPrendas = async (request, response) =>
 const obtenerDetallesPrenda = async (request, response) => {
   try {
     let idPrenda = request.params.idprenda;
+    const propietario = request.params.propietario;
 
     // Consulta SQL para obtener detalles de la prenda por su ID
     let sql = 'SELECT * FROM prenda WHERE idprenda = ?';
