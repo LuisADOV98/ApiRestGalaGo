@@ -6,21 +6,27 @@ const User = require("../models/user");
 const getChat =async(req,res)=>{
     try{
       
-        let { iduser} = req.query;
+        let {iduser} = req.query;
         let params = [iduser,iduser,iduser,iduser];
         console.log("req query!", req.query);
        
-        let sql=`SELECT idchat, datehour, hasnewmessage, firstname, surname, photo FROM chat 
-        JOIN user ON ((chat.iduser1=user.iduser AND chat.iduser1!=?) 
-                  OR (chat.iduser2=user.iduser AND chat.iduser2!=?))
-        WHERE iduser1=? OR iduser2=?;`;
+        let sql= `SELECT idchat, datehour, hasnewmessage, firstname, surname, photo FROM chat 
+                  JOIN user ON ((chat.iduser1=user.iduser AND chat.iduser1!=?) 
+                            OR (chat.iduser2=user.iduser AND chat.iduser2!=?))
+                  WHERE iduser1=? OR iduser2=?;`;
         
         // let sql=`SELECT idchat, datehour, hasnewmessage, message, firstname, surname, photo FROM chat 
         // INNER JOIN user ON ((chat.iduser1=u.iduser AND chat.iduser1!=?) 
         //           OR (chat.iduser2=user.iduser AND chat.iduser2!=?))
         // INNER JOIN GalaGo.mensaje ON (mensaje.idchat = chat.idchat)
         // WHERE iduser1=? 
-        // ORDER BY idmessage DESC LIMIT 1;`;
+        // ORDER BY idmessage DESC LIMIT 1;`
+
+        // let sql =  `SELECT c.idchat, c.datehour, c.hasnewmessage, m.message, idmessage, u.firstname, u.surname, u.photo FROM GalaGo.chat AS c
+        //             INNER JOIN GalaGo.user AS u ON ((c.iduser1=u.iduser AND c.iduser1!=iduser2) OR (c.iduser2=u.iduser AND c.iduser2!=iduser1))
+        //             INNER JOIN GalaGo.mensaje AS m ON (m.idchat = c.idchat)
+        //             WHERE iduser1=? AND c.idchat =?
+        //             ORDER BY m.idmessage DESC LIMIT 1;`;
         console.log("params:", params);
 
         /* SELECT message FROM GalaGo.mensaje
@@ -120,12 +126,12 @@ const createMensaje = async (req, res) => {
   //Datos del usuario2 para la CONVERSACIÓN 
   const getUser2 = async (req, res) => {
     try {
-      const iduser2 = req.query;
+      const iduser2 = req.query.iduser2;
       console.log("iduser2",iduser2);
       // Consulta SQL para obtener los mensajes entre dos usuarios y los detalles de usuario
-      let sql = `SELECT u.iduser, u.firstname, u.surname FROM GalaGo.chat AS c
+      let sql = `SELECT u.iduser, u.firstname, u.surname, u.photo FROM GalaGo.chat AS c
                  INNER JOIN GalaGo.user AS u ON (c.iduser2 = u.iduser)
-                 WHERE iduser2 = ` + req.query.iduser2;
+                 WHERE iduser2 = ` + iduser2;
 
       console.log("sql user2:\n",sql);
   
@@ -137,7 +143,7 @@ const createMensaje = async (req, res) => {
       res.status(200).json(resultado);
     } catch (error) {
       console.error('Error al obtener mensajes: ' + error.message);
-      res.status(500).json({ error: 'Error al obtener mensajes' });
+      res.status(500).json({ error: 'Error al obtener usuarios2' });
     }
   };
 
