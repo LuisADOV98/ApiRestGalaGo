@@ -3,6 +3,7 @@ const cors = require('cors');
 const chatRouters = require("./routers/chat.routers");
 const prendasRouters = require("./routers/prenda.routers");
 const userRouters = require("./routers/user.routers")
+const correoRouters = require("./routers/correo.routers")
 const errorHandling = require("./error/errorHandling");
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(prendasRouters);
 app.use(chatRouters);
 app.use(userRouters);
+app.use(correoRouters);
 app.use(function(req, res, next)
 {
     res.status(404).json({error:true,
