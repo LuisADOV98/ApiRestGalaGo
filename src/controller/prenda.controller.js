@@ -499,4 +499,23 @@ const deleteFav = async (request, response) => {
     }
 } */
 
-module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs, getFiltro, obtenerDetallesPrenda, deleteFav}
+const deletePrenda = async (request, response) =>
+{
+    try
+    {
+    console.log(request.body);
+    let sql = "DELETE FROM prenda WHERE iduser = " + request.body.iduser + 
+    " AND idprenda = " + request.body.idprenda;
+    console.log(sql);
+    let [result] = await pool.query(sql);
+    let respuesta = {error:false, codigo:200,
+        mensaje:"Se ha borrado la prenda", data:result}
+    response.send(respuesta);
+}
+catch(error)
+{
+    console.log(error);
+}
+}
+
+module.exports = {getPrenda, editarPrenda,getPrendaHome,getEstado,getEvento,getTalla,getTipo, postPrenda, getMisPrendas, postFav, getMisFavs, getFiltro, obtenerDetallesPrenda, deleteFav, deletePrenda}

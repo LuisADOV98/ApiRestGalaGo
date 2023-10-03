@@ -24,7 +24,7 @@ router.post("/favoritos", prendaCtrl.postFav)
 
 //elimina prenda favoritos
 router.delete("/favoritos/:iduser/:idprenda", prendaCtrl.deleteFav)
-
+router.delete("/prenda", prendaCtrl.deletePrenda)
 
 
 
