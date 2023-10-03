@@ -68,9 +68,9 @@ const getPrendaHome = async (req, res) =>
             }
             
             [result] = await pool.query(sql,params);
-            respuesta = {error:false, codigo:200,mensaje:"estos son las prendas", data:result}
+            respuesta = {error:false, codigo:200, mensaje:"estos son las prendas", data:result}
             console.log(result);
-
+            
         res.send(respuesta);
     }
     catch(err)
