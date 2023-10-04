@@ -35,23 +35,30 @@ const getPrendaHome = async (req, res) =>
                 req.query.size,
                 req.query.price,
                 req.query.evento,
-                req.query.state]
+                req.query.state,
+                req.query.location]
 
             console.log("req.query.price: ", req.query.price);
-            let column = ["tipo","size","price","evento","state"]; //array con las columnas //FALTA UBICACIÓN
+            let column = ["tipo","size","price","evento","state","location"]; //array con las columnas //FALTA UBICACIÓN
             
             let find_undefined = true;                                  //condición para que pare el bucle cuando encuentre un parámetro
             for(let i=0; i< params.length && find_undefined; i++){      //recorre el params y acaba cuando encuentra un undefinden o termina el array
                 if(params[i] !== undefined){                             //si el parámetro no es undefined y no es la columna precio entra
                     find_undefined = false;  
                     if(column[i] !== "price"){
-                        sql = `SELECT * FROM prenda WHERE ${column[i]} = "${params[i]}" `              
-                    }else if  (params[i] !== undefined){
-                        sql = `SELECT * FROM prenda HAVING ${column[i]} <= ${params[i]} `
-                    }                                               
+                        sql = `SELECT idprenda, title, price, state, size, evento, tipo, photo1, location FROM prenda
+                               JOIN user ON (user.iduser = prenda.iduser)
+                               WHERE ${column[i]} = "${params[i]}" `   
 
+                    }else if  (column[i] === "price" && params[i] !== undefined){
+                        sql = `SELECT idprenda, title, price, state, size, evento, tipo, photo1, location FROM prenda
+                               JOIN user ON (user.iduser = prenda.iduser)
+                               HAVING ${column[i]} <= ${params[i]} `
+                    }
+
+                    //CONTINUA EL BUCLE SI SE AÑADEN MÁS FILTROS 
                     for(let j=i+1; j < params.length; j++){             //empieza el segundo bucle para añadir AND si hay más filtros
-                        if(params[j] !== undefined){ //el segundo bucle empieza donde acaba el primero +1
+                        if(params[j] !== undefined){                    //el segundo bucle empieza donde acaba el primero +1
                             if(column[j] !== "price"){
                                 sql += ` AND ${column[j]} = "${params[j]}" ` //añadimos los AND siempre que no sea undefine y la columna precio 
                             }else{
