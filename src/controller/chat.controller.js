@@ -47,62 +47,64 @@ const getChat =async(req,res)=>{
  
 }
 
-const verificarChat = async (req, res)=> {
-  try
-    {
-      const{iduser} =req.body;
-      let params3 =[iduser,iduser,iduser,iduser];
-      let sql3=`SELECT idchat FROM chat WHERE (iduser1 = ? AND iduser2 = ?) OR (iduser1 = ? AND iduser2 = ?) LIMIT 1;`;
-      let [resultado3] = await pool.query(sql3,params3);
-      if(resultado3.length > 0){
-          res.send(resultado3);
-      }else
-      {
-          res.send("No se encuentran chats ");
-          // respuesta = {error: true, codigo: 200,mensaje:"No se encuentran usuarios", res_chat: resultado};
-      }
-  } 
-catch (error) {
-      res.send(error);
-      }
+// const verificarChat = async (req, res)=> {
+//   try
+//     {
+//       const{iduser} =req.body;
+//       let params3 =[iduser,iduser,iduser,iduser];
+//       let sql3=`SELECT idchat FROM chat WHERE (iduser1 = ? AND iduser2 = ?) OR (iduser1 = ? AND iduser2 = ?) LIMIT 1;`;
+//       let [resultado3] = await pool.query(sql3,params3);
+//       if(resultado3.length > 0){
+//           res.send(resultado3);
+//       }else
+//       {
+//           res.send("No se encuentran chats ");
+//           // respuesta = {error: true, codigo: 200,mensaje:"No se encuentran usuarios", res_chat: resultado};
+//       }
+//   } 
+// catch (error) {
+//       res.send(error);
+//       }
 
-}
+// }
 
 const postChat = async (req, res) => {
-    try {
-          //   const { iduser1, iduser2, message } = req.body;
-          const { iduser1, iduser2,datehour,hasnewmessage} = req.body;
+    try {      
+          const { iduser1, iduser2 } = req.body;
 
-          // Insertar un nuevo mensaje en la tabla de mensaje
-          //   let sql1 = `INSERT INTO mensaje (iduser, message) VALUES (?, ?)`;
-          let sql1 = `INSERT INTO chat (iduser1,iduser2,datehour,hasnewmessage) VALUES (?, ?,?,?)`;
-
-          let messageParams = [iduser1,iduser2 ,datehour,hasnewmessage];
-          let [resultado1] = await pool.query(sql1, messageParams);
-
-          let respuesta = {error: false, codigo: 200, mensaje: "Chat creado exitosamente", data: resultado1}
-      
-          res.send(respuesta);
-      
-          // let idmessage = resultado1.insertId;
+          // if (!iduser1 || !iduser2) {
+          // // Validar que se proporcionen ambos iduser1 e iduser2
+          // return res.status(400).send({ error: true, mensaje: 'Se requieren iduser1 e iduser2' });
+          // }   
+          let params4 =[iduser1,iduser2,iduser2,iduser1];
+          let sql4=`SELECT idchat FROM chat WHERE (iduser1 = ? AND iduser2 = ?) OR (iduser1 = ? AND iduser2 = ?) LIMIT 1;`;
+          let [resultado3] = await pool.query(sql4,params4);
+          //Para verificar que existe o no CHAT entre 2 usuarios
+          if(resultado3.length == 0){
+            // el tamaño es 0,entonces creo un nuevo CHAT.
+            let datehour = new Date().toISOString(); // Obtener la fecha y hora actual
+            let sql1 = `INSERT INTO chat (iduser1,iduser2,datehour,hasnewmessage) VALUES (?, ?,?,?)`;
+            let chatParams = [iduser1,iduser2 ,datehour,"0"];
+            let [resultado1] = await pool.query(sql1, chatParams);
   
-          // // Crear una nueva entrada en la tabla de chats
-          // let sql2 = `INSERT INTO chat (datehour,hasnewmessage,iduser1, iduser2) VALUES (?, ?, ?,?)`;
-          // let chatParams = [datehour,hasnewmessage,iduser1, iduser2];
-          //   let chatParams = [datehour,hasnewmessage,iduser1, iduser2,idmessage];
-
-          // await pool.query(sql2, chatParams);
-  
-          //   res.status(201).json({ message: 'Conversación creada exitosamente' });
-          // } catch (error) {
-          //   console.error('Error al crear conversación: ' + error.message);
-          //   res.status(500).json({ error: 'Error al crear la conversación' });
-          // }
+            let respuesta = {error: false, codigo: 200, mensaje: "Chat creado exitosamente", data: resultado1}
+        
+            res.send(respuesta);
+          }else
+          {
+            // Si ya existe un chat, enviar el resultado existente.
+            
+            respuesta = {error: false, codigo:200 ,mensaje:"Ya existe CHat", data:{}};
+            res.send(respuesta);
+          }
+         
         } catch (err) {
           console.error('Error no se ha podido crear Chat:', err);
           return { error: true, mensaje: 'Error al crear Chat' };
         }
   };
+
+
 
   const getMensaje = async (req, res) => {
     try {
@@ -176,4 +178,4 @@ const postChat = async (req, res) => {
 //     }
 // }
 // module.exports = {getChat,delChat}
-module.exports = {getChat,verificarChat, postChat,getMensaje,getUser2, getUser2}
+module.exports = {getChat,postChat,getMensaje,getUser2, getUser2}
