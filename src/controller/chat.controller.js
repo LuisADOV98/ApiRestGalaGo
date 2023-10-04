@@ -68,32 +68,40 @@ catch (error) {
 
 }
 
-const createMensaje = async (req, res) => {
+const postChat = async (req, res) => {
     try {
-    //   const { iduser1, iduser2, message } = req.body;
-      const { iduser1, iduser2, message , datehour, hasnewmessage,idchat} = req.body;
+          //   const { iduser1, iduser2, message } = req.body;
+          const { iduser1, iduser2,datehour,hasnewmessage} = req.body;
 
-      // Insertar un nuevo mensaje en la tabla de mensaje
-    //   let sql1 = `INSERT INTO mensaje (iduser, message) VALUES (?, ?)`;
-      let sql1 = `INSERT INTO mensaje (iduser, message,idchat) VALUES (?, ?,?)`;
+          // Insertar un nuevo mensaje en la tabla de mensaje
+          //   let sql1 = `INSERT INTO mensaje (iduser, message) VALUES (?, ?)`;
+          let sql1 = `INSERT INTO chat (iduser1,iduser2,datehour,hasnewmessage) VALUES (?, ?,?,?)`;
 
-      let messageParams = [iduser1, message,idchat];
-      let [resultado1] = await pool.query(sql1, messageParams);
-  
-      let idmessage = resultado1.insertId;
-  
-      // Crear una nueva entrada en la tabla de chats
-      let sql2 = `INSERT INTO chat (datehour,hasnewmessage,iduser1, iduser2) VALUES (?, ?, ?,?)`;
-      let chatParams = [datehour,hasnewmessage,iduser1, iduser2];
-    //   let chatParams = [datehour,hasnewmessage,iduser1, iduser2,idmessage];
+          let messageParams = [iduser1,iduser2 ,datehour,hasnewmessage];
+          let [resultado1] = await pool.query(sql1, messageParams);
 
-      await pool.query(sql2, chatParams);
+          let respuesta = {error: false, codigo: 200, mensaje: "Chat creado exitosamente", data: resultado1}
+      
+          res.send(respuesta);
+      
+          // let idmessage = resultado1.insertId;
   
-      res.status(201).json({ message: 'Conversación creada exitosamente' });
-    } catch (error) {
-      console.error('Error al crear conversación: ' + error.message);
-      res.status(500).json({ error: 'Error al crear la conversación' });
-    }
+          // // Crear una nueva entrada en la tabla de chats
+          // let sql2 = `INSERT INTO chat (datehour,hasnewmessage,iduser1, iduser2) VALUES (?, ?, ?,?)`;
+          // let chatParams = [datehour,hasnewmessage,iduser1, iduser2];
+          //   let chatParams = [datehour,hasnewmessage,iduser1, iduser2,idmessage];
+
+          // await pool.query(sql2, chatParams);
+  
+          //   res.status(201).json({ message: 'Conversación creada exitosamente' });
+          // } catch (error) {
+          //   console.error('Error al crear conversación: ' + error.message);
+          //   res.status(500).json({ error: 'Error al crear la conversación' });
+          // }
+        } catch (err) {
+          console.error('Error no se ha podido crear Chat:', err);
+          return { error: true, mensaje: 'Error al crear Chat' };
+        }
   };
 
   const getMensaje = async (req, res) => {
@@ -121,31 +129,32 @@ const createMensaje = async (req, res) => {
       res.status(500).json({ error: 'Error al obtener mensajes' });
     }
   };
-
-
-  //Datos del usuario2 para la CONVERSACIÓN 
-  const getUser2 = async (req, res) => {
-    try {
-      const iduser2 = req.query.iduser2;
-      console.log("iduser2",iduser2);
-      // Consulta SQL para obtener los mensajes entre dos usuarios y los detalles de usuario
-      let sql = `SELECT u.iduser, u.firstname, u.surname, u.photo FROM GalaGo.chat AS c
-                 INNER JOIN GalaGo.user AS u ON (c.iduser2 = u.iduser)
-                 WHERE iduser2 = ` + iduser2;
-
-      console.log("sql user2:\n",sql);
   
-      let queryParams = [iduser2, iduser2];
+    //Datos del usuario2 para la CONVERSACIÓN 
+    const getUser2 = async (req, res) => {
+      try {
+        const {iduser2} = req.params;
+        console.log("user =====");
+        console.log(iduser2);
+        // Consulta SQL para obtener los mensajes entre dos usuarios y los detalles de usuario
+        let sql = `SELECT u.iduser, u.firstname, u.surname,u.photo FROM chat AS c
+                   INNER JOIN user AS u ON (c.iduser2 = u.iduser)
+                   WHERE c.iduser2 = ` + iduser2;
   
-      let [resultado] = await pool.query(sql, queryParams);
-      console.log("resultado user2:", resultado);
+        console.log("sql user2:\n",sql);
+    
+        let queryParams = [iduser2, iduser2];
+    
+        let [resultado] = await pool.query(sql, queryParams);
+        console.log("resultado user2:", resultado);
+  
+        res.status(200).json(resultado);
+      } catch (error) {
+        console.error('Error al obtener mensajes: ' + error.message);
+        res.status(500).json({ error: 'Error al obtener mensajes' });
+      }
+    };
 
-      res.status(200).json(resultado);
-    } catch (error) {
-      console.error('Error al obtener mensajes: ' + error.message);
-      res.status(500).json({ error: 'Error al obtener usuarios2' });
-    }
-  };
 
 //CONVERSACION-CHAT
 // async function postChat(req,res){
@@ -167,4 +176,4 @@ const createMensaje = async (req, res) => {
 //     }
 // }
 // module.exports = {getChat,delChat}
-module.exports = {getChat,verificarChat, createMensaje,getMensaje, getUser2}
+module.exports = {getChat,verificarChat, postChat,getMensaje,getUser2, getUser2}
