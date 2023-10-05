@@ -53,7 +53,7 @@ const getPrendaHome = async (req, res) =>
                     }else if  (column[i] === "price" && params[i] !== undefined){
                         sql = `SELECT idprenda, title, price, state, size, evento, tipo, photo1, location FROM prenda
                                JOIN user ON (user.iduser = prenda.iduser)
-                               HAVING ${column[i]} <= ${params[i]} `
+                               WHERE ${column[i]} <= ${params[i]} `
                     }
 
                     //CONTINUA EL BUCLE SI SE AÑADEN MÁS FILTROS 
