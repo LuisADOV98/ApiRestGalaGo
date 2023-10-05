@@ -372,24 +372,27 @@ const getMisPrendas = async (request, response) =>
 }
 const obtenerDetallesPrenda = async (request, response) => {
   try {
-    let idPrenda = request.params.idprenda;
-    const propietario = request.params.propietario;
+    let idPrenda = request.query.idprenda;
+
 
     // Consulta SQL para obtener detalles de la prenda por su ID
-    let sql = 'SELECT * FROM prenda WHERE idprenda = ?';
+    let sql = `SELECT * FROM prenda WHERE idprenda = ${idPrenda}`
 
     // Ejecuta la consulta con el ID de la prenda proporcionado
-    let [result] = await pool.query(sql, [idPrenda]);
+    let [result] = await pool.query(sql, idPrenda);
+
 
     // Verifica si se encontraron resultados
     if (result.length === 0) {
       let respuesta = { error: true, mensaje: 'Prenda no encontrada', dataPrenda:result };
       response.send(respuesta);
+      console.log(result);
     } else {
-
-    // La prenda fue encontrada, devuelve los detalles
-    let respuesta =  { error: false, codigo: 200, mensaje: 'Detalles de la prenda', dataPrenda: result };
-    response.send(respuesta);
+        
+        // La prenda fue encontrada, devuelve los detalles
+        let respuesta =  { error: false, codigo: 200, mensaje: 'Detalles de la prenda', dataPrenda: result };
+        response.send(respuesta);
+        console.log(result);
   }
   } catch (err) {
     console.error('Error al obtener detalles de la prenda:', err);

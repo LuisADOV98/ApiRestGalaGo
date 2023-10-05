@@ -15,7 +15,7 @@ router.put("/prenda", prendaCtrl.editarPrenda); //edita una prenda por idprenda 
 router.post("/prenda", prendaCtrl.postPrenda) //agrega una prenda
 
 //Detalle prenda
-router.get('/prendaId/:idprenda', prendaCtrl.obtenerDetallesPrenda);
+// router.get('/prendaId/:idprenda', prendaCtrl.obtenerDetallesPrenda);
 
 router.get("/perfil", prendaCtrl.getMisPrendas)//muestras las prendas del perfil que son del user
 /* router.post("/perfil", prendaCtrl.postFav) *///añade a favoritos las prendas 
@@ -29,7 +29,7 @@ router.delete("/favoritos/:iduser/:idprenda", prendaCtrl.deleteFav)
 
 
 
-router.get('/prendaId/:idprenda/:propietario', prendaCtrl.obtenerDetallesPrenda);////CON PROPIETARIO
+router.get('/prendaId', prendaCtrl.obtenerDetallesPrenda);////CON PROPIETARIO
 // router.get('/prendaId/:idprenda', prendaCtrl.obtenerDetallesPrenda);////SIN PROPIETARIO
 // Filtros de HOME
 router.get("/filtro", prendaCtrl.getFiltro);
