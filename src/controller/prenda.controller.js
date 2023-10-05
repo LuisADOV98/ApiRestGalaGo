@@ -46,7 +46,8 @@ const getPrendaHome = async (req, res) =>
                 if(params[i] !== undefined){                             //si el parámetro no es undefined y no es la columna precio entra
                     find_undefined = false;  
                     if(column[i] !== "price"){
-                        sql = `SELECT idprenda, title, price, state, size, evento, tipo, photo1, location FROM prenda
+                        sql = `SELECT idprenda, title, price, state, size, evento, tipo, photo1, location 
+                               FROM prenda
                                JOIN user ON (user.iduser = prenda.iduser)
                                WHERE ${column[i]} = "${params[i]}" `   
 
@@ -383,7 +384,10 @@ const obtenerDetallesPrenda = async (request, response) => {
 
 
     // Consulta SQL para obtener detalles de la prenda por su ID
-    let sql = `SELECT * FROM prenda WHERE idprenda = ${idPrenda}`
+    let sql = `SELECT idprenda, title, description, price, state, size, evento, tipo, photo1, photo2, photo3, photo4, location
+               FROM prenda 
+               JOIN user ON (user.iduser = prenda.iduser)
+               WHERE idprenda = ${idPrenda}`
 
     // Ejecuta la consulta con el ID de la prenda proporcionado
     let [result] = await pool.query(sql, idPrenda);
