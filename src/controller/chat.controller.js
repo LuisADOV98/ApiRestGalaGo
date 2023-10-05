@@ -104,7 +104,36 @@ const postChat = async (req, res) => {
         }
   };
 
-
+const postMensaje = async (req, res) =>{
+  console.log("HOLASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+  try{
+    console.log("HOLASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    console.log("HOLASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    console.log("HOLASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    console.log("HOLASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    console.log("HOLASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      const {message,iduser, idchat}=req.body;
+      let sql5 = `INSERT INTO mensaje (message,iduser,idchat) VALUES (?, ?,?)`;
+      console.log(sql5)
+      let paramsMensaje=[message,iduser,idchat];
+      console.log(paramsMensaje);
+      let [resultado5] = await pool.query(sql5, paramsMensaje);
+      let respuesta = {error: false, codigo: 200, mensaje: "Mensaje creado exitosamente", data: resultado5}
+      res.send(respuesta);
+/*       if(resultado5.length == 0){
+        let respuesta = {error: false, codigo: 200, mensaje: "Mensaje creado exitosamente", data: resultado5}
+        
+        res.send(respuesta);
+        }
+      else{
+        let respuesta ={error: false, codigo:200 ,mensaje:"Mensaje ya añadido", data:{}};
+        res.send(respuesta);
+      } */
+    } catch (err) {
+      console.error('Error no se ha podido crear mensaje:', err);
+      return { error: true, mensaje: 'Error al crear mensaje' };
+    }
+}
 
   const getMensaje = async (req, res) => {
     try {
@@ -178,4 +207,4 @@ const postChat = async (req, res) => {
 //     }
 // }
 // module.exports = {getChat,delChat}
-module.exports = {getChat,postChat,getMensaje,getUser2, getUser2}
+module.exports = {getChat,postChat,getMensaje,postMensaje,getUser2, getUser2}
