@@ -10,11 +10,11 @@ const app = express();
 // app.set("port", 3000);
 
 const corsOptions = {
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    optionsSuccessStatus: 204,
-    maxAge: 500,
-    origin: ['http://localhost:4200','https://gala-go-tau.vercel.app/' ]
+    methods: ['GET','POST','PUT','DELETE'],
+    allowedHeaders: ['Content-Type','Authorization'],
+    optionsSuccessStatus:204,
+    maxAge:500,
+    origin: ['http://localhost:4200','https://gala-go-tau.vercel.app/']
 }
 
 app.use(cors(corsOptions));
