@@ -9,7 +9,7 @@ const app = express();
 
 // app.set("port", 3000);
 
-app.use(cors({origin:"https://gala-go-tau.vercel.app/"}));
+app.use(cors({'Access-Control-Allow-Origin':["https://gala-go-tau.vercel.app/","*"]}));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(prendasRouters);
