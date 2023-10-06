@@ -14,7 +14,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type','Authorization'],
     optionsSuccessStatus:204,
     maxAge:500,
-    origin: ['http://localhost:4200','https://gala-go-tau.vercel.app/']
+    origin: ['http://localhost:4200','https://gala-go-five.vercel.app/',"*"]
 }
 
 app.use(cors(corsOptions));
