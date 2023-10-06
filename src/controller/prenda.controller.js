@@ -384,7 +384,7 @@ const obtenerDetallesPrenda = async (request, response) => {
 
 
     // Consulta SQL para obtener detalles de la prenda por su ID
-    let sql = `SELECT idprenda, title, description, price, state, size, evento, tipo, photo1, photo2, photo3, photo4, location
+    let sql = `SELECT idprenda, title, prenda.iduser, description, price, state, size, evento, tipo, photo1, photo2, photo3, photo4, location
                FROM prenda 
                JOIN user ON (user.iduser = prenda.iduser)
                WHERE idprenda = ${idPrenda}`
